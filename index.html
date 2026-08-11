@@ -6,162 +6,160 @@
 <meta name="robots" content="noindex, nofollow">
 <title>O-Live · Реферальная программа блогеров</title>
 <style>
-  :root{
-    --surface:#FFFFFF; --surface-2:#F7F8F6; --surface-3:#F2F2F2;
-    --ink:#181717; --ink-2:#4A4F4C; --ink-3:#7C8380;
-    --line:#E4E7E3;
-    --brand:#194536; --brand-2:#2E6A53; --lime-soft:#EAF3DF;
-    --warn-bg:#FFF6E0; --warn-line:#E8C56B; --warn-ink:#6B4E05;
-    --ok-bg:#E8F5EE; --ok-line:#7CC49E; --ok-ink:#14563A;
-    --err-bg:#FDECEC; --err-line:#E9A3A3; --err-ink:#7B2020;
-    --radius:14px;
-    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
-  }
-  @media (prefers-color-scheme: dark){
-    :root{
-      --surface:#121614; --surface-2:#191F1C; --surface-3:#1F2622;
-      --ink:#EDF1EE; --ink-2:#AEB8B3; --ink-3:#7E8A85;
-      --line:#2A322E;
-      --brand:#8FD6B6; --brand-2:#69BF9B; --lime-soft:#243026;
-      --warn-bg:#2E2510; --warn-line:#6E5717; --warn-ink:#F0D48A;
-      --ok-bg:#14291F; --ok-line:#2F6349; --ok-ink:#9BE0BE;
-      --err-bg:#2E1616; --err-line:#6B2F2F; --err-ink:#F0AFAF;
-    }
-  }
-  *{box-sizing:border-box}
-  [hidden]{display:none!important}
-  body{margin:0;background:var(--surface-2);color:var(--ink);
-       font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Arial,sans-serif;
-       -webkit-font-smoothing:antialiased}
-  .wrap{max-width:1240px;margin:0 auto;padding:32px 22px 72px}
-  header.top{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;justify-content:space-between;margin-bottom:22px}
-  h1{font-size:25px;line-height:1.2;margin:0 0 5px;letter-spacing:-.015em}
-  .sub{color:var(--ink-3);font-size:13.5px;margin:0}
-  .upd{font-size:12px;color:var(--ink-3);text-align:right;line-height:1.7}
-  .upd button{margin-top:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);
-    border-radius:8px;font:600 12px/1 inherit;padding:7px 11px;cursor:pointer}
-  .upd button:hover{background:var(--lime-soft);color:var(--brand)}
-  .banner{display:flex;gap:12px;align-items:flex-start;border-radius:var(--radius);padding:14px 16px;
-    font-size:13.5px;line-height:1.55;margin-bottom:22px;border:1px solid}
-  .banner.warn{background:var(--warn-bg);border-color:var(--warn-line);color:var(--warn-ink)}
-  .banner.ok{background:var(--ok-bg);border-color:var(--ok-line);color:var(--ok-ink)}
-  .banner.err{background:var(--err-bg);border-color:var(--err-line);color:var(--err-ink)}
-  .banner .ico{flex:0 0 auto}
-  .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(178px,1fr));gap:12px;margin-bottom:24px}
-  .tile{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:15px 16px 14px}
-  .tile .lbl{font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3);font-weight:650;margin-bottom:7px}
-  .tile .val{font-size:26px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
-  .tile .val small{font-size:14px;font-weight:600;color:var(--ink-3);margin-left:3px}
-  .tile.accent{background:var(--lime-soft);border-color:transparent}
-  .tile.accent .val{color:var(--brand)}
-  section{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
-          padding:20px 20px 22px;margin-bottom:20px}
-  h2{font-size:15px;margin:0 0 3px;font-weight:700}
-  .h2sub{font-size:12.5px;color:var(--ink-3);margin:0 0 18px}
-  .bars{display:flex;flex-direction:column;gap:9px}
-  .row{display:grid;grid-template-columns:104px 1fr 120px;gap:12px;align-items:center}
-  .row .nm{font-size:13px;color:var(--ink-2);text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .track{height:22px;background:var(--surface-3);border-radius:5px;overflow:hidden}
-  .bar{height:100%;background:var(--brand-2);border-radius:0 5px 5px 0;min-width:2px;
-       transition:width .45s cubic-bezier(.4,0,.2,1)}
-  .row:hover .bar{background:var(--brand)}
-  .row .amt{font-size:13px;font-variant-numeric:tabular-nums;font-weight:600}
-  .row .amt em{font-style:normal;color:var(--ink-3);font-weight:500}
-  table{width:100%;border-collapse:collapse;font-size:13.5px}
-  .scroll{overflow-x:auto;margin:0 -20px;padding:0 20px}
-  th,td{text-align:right;padding:11px 9px;border-bottom:1px solid var(--line);white-space:nowrap}
-  th{font-size:11px;letter-spacing:.045em;text-transform:uppercase;color:var(--ink-3);font-weight:650;
-     border-bottom:1.5px solid var(--line);background:var(--surface)}
-  th:first-child,td:first-child{text-align:left}
-  tbody tr:hover td{background:var(--surface-2)}
-  td.num,td.money,td.due{font-variant-numeric:tabular-nums}
-  td.money{font-weight:600}
-  td.due{font-weight:700;color:var(--brand)}
-  tfoot td{border-bottom:0;border-top:1.5px solid var(--line);font-weight:700}
-  .pname{font-weight:650}
-  .pmeta{display:block;font-size:11.5px;color:var(--ink-3);font-weight:400;margin-top:2px}
-  code{font-family:var(--mono);font-size:11.5px;background:var(--surface-3);padding:2px 6px;border-radius:5px;color:var(--ink-2)}
-  .muted{color:var(--ink-3)}
-  td.lnk{text-align:left;font-family:var(--mono);font-size:11.5px}
-  td.lnk a{color:var(--brand-2);text-decoration:none;word-break:break-all}
-  .copy{margin-left:9px;border:1px solid var(--line);background:var(--surface-3);color:var(--ink-2);
-    border-radius:6px;font:600 11px/1 inherit;padding:5px 8px;cursor:pointer}
-  .copy:hover{background:var(--lime-soft);color:var(--brand)}
-  .gateRow{display:flex;gap:10px;flex-wrap:wrap}
-  .gateRow input{flex:1 1 220px;min-width:0;border:1px solid var(--line);background:var(--surface-3);
-    color:var(--ink);border-radius:9px;font:15px/1 inherit;padding:12px 13px}
-  .gateRow input:focus{outline:2px solid var(--brand-2);outline-offset:1px}
-  .gateRow button{border:0;background:var(--brand);color:#fff;border-radius:9px;
-    font:650 14px/1 inherit;padding:12px 20px;cursor:pointer}
-  @media (prefers-color-scheme: dark){ .gateRow button{color:#0F1512} }
-  footer{color:var(--ink-3);font-size:12px;text-align:center;margin-top:26px;line-height:1.8}
-  @media(max-width:620px){.row{grid-template-columns:78px 1fr 92px}.wrap{padding:22px 14px 56px}h1{font-size:21px}}
+:root{--surface:#FFF;--surface-2:#F7F8F6;--surface-3:#F2F2F2;--ink:#181717;--ink-2:#4A4F4C;--ink-3:#7C8380;
+--line:#E4E7E3;--brand:#194536;--brand-2:#2E6A53;--lime-soft:#EAF3DF;
+--warn-bg:#FFF6E0;--warn-line:#E8C56B;--warn-ink:#6B4E05;--ok-bg:#E8F5EE;--ok-line:#7CC49E;--ok-ink:#14563A;
+--err-bg:#FDECEC;--err-line:#E9A3A3;--err-ink:#7B2020;
+--radius:14px;--mono:ui-monospace,SFMono-Regular,Menlo,monospace}
+@media(prefers-color-scheme:dark){:root{--surface:#121614;--surface-2:#191F1C;--surface-3:#1F2622;--ink:#EDF1EE;
+--ink-2:#AEB8B3;--ink-3:#7E8A85;--line:#2A322E;--brand:#8FD6B6;--brand-2:#69BF9B;--lime-soft:#243026;
+--warn-bg:#2E2510;--warn-line:#6E5717;--warn-ink:#F0D48A;--ok-bg:#14291F;--ok-line:#2F6349;--ok-ink:#9BE0BE;
+--err-bg:#2E1616;--err-line:#6B2F2F;--err-ink:#F0AFAF}}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--surface-2);color:var(--ink);
+font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:32px 22px 72px}
+header.top{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;justify-content:space-between;margin-bottom:20px}
+h1{font-size:25px;line-height:1.2;margin:0 0 5px;letter-spacing:-.015em}
+.sub{color:var(--ink-3);font-size:13.5px;margin:0}
+.upd{font-size:12px;color:var(--ink-3);text-align:right;line-height:1.7}
+.upd button{margin-top:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);
+border-radius:8px;font:600 12px/1 inherit;padding:7px 11px;cursor:pointer}
+.upd button:hover{background:var(--lime-soft);color:var(--brand)}
+.banner{display:flex;gap:12px;align-items:flex-start;border-radius:var(--radius);padding:14px 16px;
+font-size:13.5px;line-height:1.55;margin-bottom:20px;border:1px solid}
+.banner.warn{background:var(--warn-bg);border-color:var(--warn-line);color:var(--warn-ink)}
+.banner.ok{background:var(--ok-bg);border-color:var(--ok-line);color:var(--ok-ink)}
+.banner.err{background:var(--err-bg);border-color:var(--err-line);color:var(--err-ink)}
+.banner .ico{flex:0 0 auto}
+.rules{background:var(--lime-soft);border-radius:var(--radius);padding:16px 18px;margin-bottom:22px;
+font-size:13.5px;line-height:1.6;color:var(--brand)}
+.rules b{font-weight:700}
+.rules .pct{font-size:20px;font-weight:800;letter-spacing:-.01em}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(178px,1fr));gap:12px;margin-bottom:24px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:15px 16px 14px}
+.tile .lbl{font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3);font-weight:650;margin-bottom:7px}
+.tile .val{font-size:26px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.tile .val small{font-size:14px;font-weight:600;color:var(--ink-3);margin-left:3px}
+.tile.accent{background:var(--lime-soft);border-color:transparent}
+.tile.accent .val{color:var(--brand)}
+section{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px 20px 22px;margin-bottom:20px}
+h2{font-size:15px;margin:0 0 3px;font-weight:700}
+.h2sub{font-size:12.5px;color:var(--ink-3);margin:0 0 18px}
+.cards{display:flex;flex-direction:column;gap:10px}
+.card{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--surface)}
+.card:hover{border-color:var(--brand-2)}
+.card .nm{font-weight:700;font-size:15px;margin-bottom:6px}
+.card .lnk{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:10px}
+.card .lnk a{font-family:var(--mono);font-size:12.5px;color:var(--brand-2);text-decoration:none;word-break:break-all}
+.card .lnk a:hover{text-decoration:underline}
+.copy{border:1px solid var(--line);background:var(--surface-3);color:var(--ink-2);
+border-radius:6px;font:600 11px/1 inherit;padding:6px 9px;cursor:pointer}
+.copy:hover{background:var(--lime-soft);color:var(--brand)}
+.stats{display:flex;gap:22px;flex-wrap:wrap;align-items:baseline}
+.stat .k{font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3);font-weight:650}
+.stat .v{font-size:18px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.stat.earn .v{color:var(--brand);font-size:20px}
+.stat .v em{font-style:normal;font-size:13px;font-weight:500;color:var(--ink-3)}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+.scroll{overflow-x:auto;margin:0 -20px;padding:0 20px}
+th,td{text-align:right;padding:11px 9px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:11px;letter-spacing:.045em;text-transform:uppercase;color:var(--ink-3);font-weight:650;
+border-bottom:1.5px solid var(--line);background:var(--surface)}
+th:first-child,td:first-child{text-align:left}
+tbody tr:hover td{background:var(--surface-2)}
+td.num,td.money,td.due{font-variant-numeric:tabular-nums}
+td.money{font-weight:600}
+td.due{font-weight:700;color:var(--brand)}
+tfoot td{border-bottom:0;border-top:1.5px solid var(--line);font-weight:700}
+.pname{font-weight:650}
+.pmeta{display:block;font-size:11.5px;color:var(--ink-3);font-weight:400;margin-top:2px}
+.bars{display:flex;flex-direction:column;gap:9px}
+.row{display:grid;grid-template-columns:104px 1fr 130px;gap:12px;align-items:center}
+.row .nm{font-size:13px;color:var(--ink-2);text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.track{height:22px;background:var(--surface-3);border-radius:5px;overflow:hidden}
+.bar{height:100%;background:var(--brand-2);border-radius:0 5px 5px 0;min-width:2px;transition:width .45s cubic-bezier(.4,0,.2,1)}
+.row:hover .bar{background:var(--brand)}
+.row .amt{font-size:13px;font-variant-numeric:tabular-nums;font-weight:600}
+.row .amt em{font-style:normal;color:var(--ink-3);font-weight:500}
+.muted{color:var(--ink-3)}
+code{font-family:var(--mono);font-size:11.5px;background:var(--surface-3);padding:2px 6px;border-radius:5px;color:var(--ink-2)}
+.gateRow{display:flex;gap:10px;flex-wrap:wrap}
+.gateRow input{flex:1 1 220px;min-width:0;border:1px solid var(--line);background:var(--surface-3);
+color:var(--ink);border-radius:9px;font:15px/1 inherit;padding:12px 13px}
+.gateRow button{border:0;background:var(--brand);color:#fff;border-radius:9px;font:650 14px/1 inherit;padding:12px 20px;cursor:pointer}
+@media(prefers-color-scheme:dark){.gateRow button{color:#0F1512}}
+footer{color:var(--ink-3);font-size:12px;text-align:center;margin-top:26px;line-height:1.8}
+@media(max-width:620px){.row{grid-template-columns:78px 1fr 100px}.wrap{padding:22px 14px 56px}h1{font-size:21px}.stats{gap:16px}}
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <header class="top">
-    <div>
-      <h1>Реферальная программа блогеров</h1>
-      <p class="sub">O-Live · 5% с оплаченных сделок · окно закрепления клиента 90 дней</p>
-    </div>
-    <div class="upd">
-      <span id="updated">загрузка…</span><br>
-      <span id="synced"></span>
-      <br><button id="refresh">обновить</button>
-    </div>
-  </header>
+<header class="top">
+  <div>
+    <h1>Реферальная программа блогеров</h1>
+    <p class="sub">O-Live · вознаграждение 10% с оплаченных продаж</p>
+  </div>
+  <div class="upd">
+    <span id="updated">загрузка…</span><br>
+    <span id="synced"></span>
+    <br><button id="refresh">обновить</button>
+  </div>
+</header>
 
-  <div id="banner"></div>
+<div id="banner"></div>
 
-  <section id="gate" hidden>
-    <h2>Ключ доступа</h2>
-    <p class="h2sub">Страница не хранит ключ в коде — введите его один раз, браузер запомнит на этом устройстве</p>
-    <div class="gateRow">
-      <input id="keyInput" type="password" placeholder="ключ доступа" autocomplete="off" spellcheck="false">
-      <button id="keyGo">Открыть</button>
-    </div>
-  </section>
+<section id="gate" hidden>
+  <h2>Ключ доступа</h2>
+  <p class="h2sub">Страница не хранит ключ в коде — введите его один раз, браузер запомнит на этом устройстве</p>
+  <div class="gateRow">
+    <input id="keyInput" type="password" placeholder="ключ доступа" autocomplete="off" spellcheck="false">
+    <button id="keyGo">Открыть</button>
+  </div>
+</section>
 
-  <div class="tiles" id="tiles"></div>
+<div class="rules">
+  <span class="pct">10%</span> — вознаграждение блогера с каждой оплаченной продажи.<br>
+  Чем больше продаж по его ссылке, тем больше он зарабатывает: <b>заработок = сумма оплаченных продаж × 10%</b>.
+  Клиент закрепляется за блогером на <b>90 дней</b> — продления в этот срок тоже идут ему.
+  Источник определяется автоматически по сайту, с которого пришёл заказ.
+</div>
 
-  <section>
-    <h2 id="chartTitle">Выручка по блогерам</h2>
-    <p class="h2sub" id="chartSub">Сумма оплаченных сделок закреплённых клиентов, ₸</p>
-    <div class="bars" id="bars"></div>
-  </section>
+<div class="tiles" id="tiles"></div>
 
-  <section>
-    <h2>Детализация</h2>
-    <p class="h2sub">Переходы → закреплённые клиенты → оплаченные сделки → вознаграждение</p>
-    <div class="scroll">
-      <table>
-        <thead><tr>
-          <th>Блогер</th><th>Переходы</th><th>Клиентов</th><th>Сделок</th><th>Оплачено</th>
-          <th>Выручка, ₸</th><th>Ср. чек, ₸</th><th>К выплате 5%, ₸</th><th>Выплачено, ₸</th><th>Остаток, ₸</th>
-        </tr></thead>
-        <tbody id="tbody"></tbody>
-        <tfoot id="tfoot"></tfoot>
-      </table>
-    </div>
-  </section>
+<section>
+  <h2>Ссылки блогеров и заработок</h2>
+  <p class="h2sub">Возле каждой ссылки — сколько по ней продано и сколько блогер заработал</p>
+  <div class="cards" id="cards"></div>
+</section>
 
-  <section>
-    <h2>Ссылки для блогеров</h2>
-    <p class="h2sub">Готовы к отправке — каждый переход по ним считается автоматически</p>
-    <div class="scroll">
-      <table>
-        <thead><tr><th>Блогер</th><th style="text-align:left">Ссылка</th><th style="text-align:left">Промокод</th><th>Переходы</th></tr></thead>
-        <tbody id="links"></tbody>
-      </table>
-    </div>
-  </section>
+<section>
+  <h2 id="chartTitle">Заработок по блогерам</h2>
+  <p class="h2sub" id="chartSub">10% от суммы оплаченных продаж, ₸</p>
+  <div class="bars" id="bars"></div>
+</section>
 
-  <footer>
-    Данные: Supabase Project_olive · сделки синхронизируются из Bitrix24<br>
-    Оплаченной считается сделка с заполненной датой оплаты и суммой &gt; 0, стадии-потери исключены · страница сама обновляется каждые 5 минут
-  </footer>
+<section>
+  <h2>Детализация</h2>
+  <p class="h2sub">Переходы → привлечённые клиенты → продажи → заработок</p>
+  <div class="scroll">
+    <table>
+      <thead><tr>
+        <th>Блогер</th><th>Переходы</th><th>Клиентов</th><th>Сделок</th><th>Продаж</th>
+        <th>Продано на, ₸</th><th>Ср. чек, ₸</th><th>Заработал 10%, ₸</th><th>Выплачено, ₸</th><th>Остаток, ₸</th>
+      </tr></thead>
+      <tbody id="tbody"></tbody>
+      <tfoot id="tfoot"></tfoot>
+    </table>
+  </div>
+</section>
+
+<footer>
+  Данные: Supabase Project_olive · продажи синхронизируются из Bitrix24<br>
+  Продажей считается оплаченная сделка: заполнена дата оплаты и сумма &gt; 0, стадии-потери исключены · страница обновляется каждые 5 минут
+</footer>
 </div>
 
 <script>
@@ -179,18 +177,6 @@ function readKey(){
 }
 var KEY = readKey();
 
-function showGate(msg){
-  document.getElementById('gate').hidden = false;
-  document.getElementById('tiles').innerHTML = '';
-  document.getElementById('bars').innerHTML = '';
-  document.getElementById('tbody').innerHTML = '';
-  document.getElementById('tfoot').innerHTML = '';
-  document.getElementById('links').innerHTML = '';
-  document.getElementById('updated').textContent = msg || 'нужен ключ доступа';
-  document.getElementById('synced').textContent = '';
-  document.getElementById('keyInput').focus();
-}
-
 var nf = new Intl.NumberFormat('ru-RU');
 function n0(v){ return nf.format(Math.round(Number(v) || 0)); }
 function dash(v){ return Number(v) ? n0(v) : '<span class="muted">—</span>'; }
@@ -198,63 +184,86 @@ function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(
   return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
 function fmtDate(iso){
   if (!iso) return 'нет данных';
-  try { return new Intl.DateTimeFormat('ru-RU', {dateStyle:'short', timeStyle:'short', timeZone:'Asia/Almaty'}).format(new Date(iso)); }
+  try { return new Intl.DateTimeFormat('ru-RU',{dateStyle:'short',timeStyle:'short',timeZone:'Asia/Almaty'}).format(new Date(iso)); }
   catch (e) { return iso; }
+}
+
+function showGate(msg){
+  document.getElementById('gate').hidden = false;
+  ['tiles','cards','bars','tbody','tfoot'].forEach(function(id){ document.getElementById(id).innerHTML = ''; });
+  document.getElementById('updated').textContent = msg || 'нужен ключ доступа';
+  document.getElementById('synced').textContent = '';
+  document.getElementById('keyInput').focus();
+}
+
+function tile(label, value, accent){
+  return '<div class="tile' + (accent ? ' accent' : '') + '"><div class="lbl">' + label +
+         '</div><div class="val">' + value + '</div></div>';
 }
 
 function render(d){
   var p = d.partners, t = d.totals;
-  var anyRevenue = t.revenue > 0;
+  var anyMoney = t.revenue > 0;
 
   document.getElementById('updated').textContent = 'обновлено ' + fmtDate(d.generatedAt);
   document.getElementById('synced').textContent = 'синхронизация с Bitrix24: ' + fmtDate(d.bitrixSyncedAt);
 
-  document.getElementById('banner').innerHTML = anyRevenue
-    ? '<div class="banner ok"><span class="ico">✓</span><span><b>Продажи считаются.</b> ' +
-      'Клиенты закреплены за блогерами, оплаченные сделки из Bitrix24 попадают в отчёт автоматически.</span></div>'
-    : '<div class="banner warn"><span class="ico">⚠</span><span><b>Переходы считаются, продажи — пока нет.</b> ' +
-      'Ссылки живые и пишут каждый переход. Чтобы покупки привязывались к блогеру, менеджер должен вносить ' +
-      'промокод блогера в поле сделки Bitrix — либо разработчик доводит <code>ref</code> из ссылки до заказа. ' +
-      'Как только появится первая сделка с промокодом, цифры здесь заполнятся сами.</span></div>';
+  document.getElementById('banner').innerHTML = anyMoney
+    ? '<div class="banner ok"><span class="ico">✓</span><span><b>Продажи считаются автоматически.</b> ' +
+      'Источник берётся из заголовка сделки в Bitrix — «лендинг «Блогер N»».</span></div>'
+    : '<div class="banner warn"><span class="ico">⚠</span><span><b>Продаж пока нет.</b> ' +
+      'Ссылки живые и считают переходы. Как только с сайта блогера придёт оплаченный заказ, ' +
+      'он появится здесь сам — источник система берёт из заголовка сделки в Bitrix.</span></div>';
 
   document.getElementById('tiles').innerHTML =
     tile('Переходы по ссылкам', n0(t.clicks)) +
-    tile('Переходы за 7 дней', n0(d.clicks7d)) +
     tile('Привлечено клиентов', n0(t.referrals)) +
-    tile('Оплаченных сделок', n0(t.paid)) +
-    tile('Выручка от блогеров', n0(t.revenue) + '<small>₸</small>') +
-    tile('К выплате блогерам', n0(t.commission) + '<small>₸</small>', true);
+    tile('Продаж (оплачено)', n0(t.paid)) +
+    tile('Продано на', n0(t.revenue) + '<small>₸</small>') +
+    tile('Заработали блогеры', n0(t.commission) + '<small>₸</small>', true);
 
-  document.getElementById('chartTitle').textContent = anyRevenue ? 'Выручка по блогерам' : 'Переходы по блогерам';
-  document.getElementById('chartSub').textContent = anyRevenue
-    ? 'Сумма оплаченных сделок закреплённых клиентов, ₸'
-    : 'Пока продаж нет — показаны переходы по реферальным ссылкам';
+  document.getElementById('cards').innerHTML = p.map(function(b){
+    return '<div class="card">' +
+      '<div class="nm">' + esc(b.name) + '</div>' +
+      '<div class="lnk"><a href="' + esc(b.link) + '" target="_blank" rel="noopener">' + esc(b.link) + '</a>' +
+      '<button class="copy" data-copy="' + esc(b.link) + '">копировать</button></div>' +
+      '<div class="stats">' +
+        '<div class="stat"><div class="k">Переходов</div><div class="v">' + n0(b.clicks) + '</div></div>' +
+        '<div class="stat"><div class="k">Продаж</div><div class="v">' + n0(b.paid) + '</div></div>' +
+        '<div class="stat"><div class="k">Продано на</div><div class="v">' + n0(b.revenue) + ' <em>₸</em></div></div>' +
+        '<div class="stat earn"><div class="k">Заработал (10%)</div><div class="v">' + n0(b.commission) + ' <em>₸</em></div></div>' +
+      '</div></div>';
+  }).join('');
 
   var max = 1;
-  for (var i = 0; i < p.length; i++) max = Math.max(max, anyRevenue ? p[i].revenue : p[i].clicks);
+  for (var i = 0; i < p.length; i++) max = Math.max(max, anyMoney ? p[i].commission : p[i].clicks);
+  document.getElementById('chartTitle').textContent = anyMoney ? 'Заработок по блогерам' : 'Переходы по блогерам';
+  document.getElementById('chartSub').textContent = anyMoney
+    ? '10% от суммы оплаченных продаж, ₸'
+    : 'Продаж пока нет — показаны переходы по ссылкам';
 
-  document.getElementById('bars').innerHTML = p.map(function(d2){
-    var v = anyRevenue ? d2.revenue : d2.clicks;
-    var tip = d2.name + ': ' + n0(v) + (anyRevenue ? ' ₸' : ' переходов');
+  document.getElementById('bars').innerHTML = p.map(function(b){
+    var v = anyMoney ? b.commission : b.clicks;
+    var tip = b.name + ': ' + n0(v) + (anyMoney ? ' ₸ заработано' : ' переходов');
     return '<div class="row" title="' + esc(tip) + '">' +
-      '<div class="nm">' + esc(d2.name) + '</div>' +
+      '<div class="nm">' + esc(b.name) + '</div>' +
       '<div class="track"><div class="bar" style="width:' + (v / max * 100).toFixed(1) + '%"></div></div>' +
       '<div class="amt">' + (v ? n0(v) : '<em>нет данных</em>') + '</div></div>';
   }).join('');
 
-  document.getElementById('tbody').innerHTML = p.map(function(d2){
-    var avg = d2.paid ? Math.round(d2.revenue / d2.paid) : 0;
-    return '<tr><td><span class="pname">' + esc(d2.name) + '</span>' +
-      '<span class="pmeta">' + esc(d2.slug) + ' · <code>' + esc(d2.code) + '</code></span></td>' +
-      '<td class="num">' + dash(d2.clicks) + '</td>' +
-      '<td class="num">' + dash(d2.referrals) + '</td>' +
-      '<td class="num">' + dash(d2.deals) + '</td>' +
-      '<td class="num">' + dash(d2.paid) + '</td>' +
-      '<td class="money">' + dash(d2.revenue) + '</td>' +
+  document.getElementById('tbody').innerHTML = p.map(function(b){
+    var avg = b.paid ? Math.round(b.revenue / b.paid) : 0;
+    return '<tr><td><span class="pname">' + esc(b.name) + '</span>' +
+      '<span class="pmeta">' + esc(b.link.replace('https://','')) + '</span></td>' +
+      '<td class="num">' + dash(b.clicks) + '</td>' +
+      '<td class="num">' + dash(b.referrals) + '</td>' +
+      '<td class="num">' + dash(b.deals) + '</td>' +
+      '<td class="num">' + dash(b.paid) + '</td>' +
+      '<td class="money">' + dash(b.revenue) + '</td>' +
       '<td class="num">' + dash(avg) + '</td>' +
-      '<td class="due">' + dash(d2.commission) + '</td>' +
-      '<td class="num">' + dash(d2.paidOut) + '</td>' +
-      '<td class="money">' + dash(d2.balance) + '</td></tr>';
+      '<td class="due">' + dash(b.commission) + '</td>' +
+      '<td class="num">' + dash(b.paidOut) + '</td>' +
+      '<td class="money">' + dash(b.balance) + '</td></tr>';
   }).join('');
 
   var avgT = t.paid ? Math.round(t.revenue / t.paid) : 0;
@@ -264,19 +273,6 @@ function render(d){
     '<td class="money">' + dash(t.revenue) + '</td><td class="num">' + dash(avgT) + '</td>' +
     '<td class="due">' + dash(t.commission) + '</td><td class="num">' + dash(t.paidOut) + '</td>' +
     '<td class="money">' + dash(t.balance) + '</td></tr>';
-
-  document.getElementById('links').innerHTML = p.map(function(d2){
-    return '<tr><td><span class="pname">' + esc(d2.name) + '</span></td>' +
-      '<td class="lnk"><a href="' + esc(d2.link) + '" target="_blank" rel="noopener">' + esc(d2.link) + '</a>' +
-      '<button class="copy" data-copy="' + esc(d2.link) + '">копировать</button></td>' +
-      '<td><code>' + esc(d2.code) + '</code></td>' +
-      '<td class="num">' + dash(d2.clicks) + '</td></tr>';
-  }).join('');
-}
-
-function tile(label, value, accent){
-  return '<div class="tile' + (accent ? ' accent' : '') + '"><div class="lbl">' + label +
-         '</div><div class="val">' + value + '</div></div>';
 }
 
 function load(){
@@ -288,8 +284,7 @@ function load(){
         try { localStorage.removeItem('olvRefKey'); } catch (e) {}
         KEY = '';
         document.getElementById('banner').innerHTML =
-          '<div class="banner err"><span class="ico">✕</span><span><b>Ключ не подошёл.</b> ' +
-          'Проверьте ссылку или введите ключ заново.</span></div>';
+          '<div class="banner err"><span class="ico">✕</span><span><b>Ключ не подошёл.</b> Введите ключ заново.</span></div>';
         showGate('неверный ключ');
         return;
       }
@@ -299,8 +294,7 @@ function load(){
     })
     .catch(function(e){
       document.getElementById('banner').innerHTML =
-        '<div class="banner err"><span class="ico">✕</span><span><b>Не удалось загрузить данные.</b> ' +
-        esc(e.message) + '</span></div>';
+        '<div class="banner err"><span class="ico">✕</span><span><b>Не удалось загрузить данные.</b> ' + esc(e.message) + '</span></div>';
       document.getElementById('updated').textContent = 'ошибка загрузки';
     });
 }
