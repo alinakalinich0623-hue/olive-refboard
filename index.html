@@ -1,436 +1,361 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
 <title>O-Live · Реферальная программа блогеров</title>
 <style>
-  :root{
-    --bg:#F6F7F5; --card:#FFFFFF; --ink:#16211A; --muted:#6B7A70;
-    --line:#E3E8E3; --accent:#2F6B3C; --accent-soft:#EEF4EE; --accent-line:#CFE0D2;
-    --err:#A3232B; --err-soft:#FDF0F0; --err-line:#F2D3D3;
-    --radius:14px;
-  }
-  *{box-sizing:border-box}
-  html,body{margin:0;padding:0}
-  body{
-    background:var(--bg); color:var(--ink);
-    font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    -webkit-font-smoothing:antialiased;
-  }
-  .wrap{max-width:1180px;margin:0 auto;padding:28px 20px 72px}
-  a{color:var(--accent)}
-
-  /* --- header --- */
-  .top{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap}
-  h1{margin:0;font-size:28px;line-height:1.2;letter-spacing:-.4px}
-  .sub{margin:6px 0 0;color:var(--muted);font-size:15px}
-  .topright{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
-  .stamp{color:var(--muted);font-size:13px}
-  .btn{
-    border:1px solid var(--line);background:#fff;color:var(--ink);
-    padding:9px 16px;border-radius:10px;font-size:14px;cursor:pointer;
-    transition:background .15s,border-color .15s;
-  }
-  .btn:hover{background:var(--accent-soft);border-color:var(--accent-line)}
-  .btn:active{transform:translateY(1px)}
-  .btn.small{padding:5px 11px;font-size:13px;border-radius:8px}
-
-  /* --- banners --- */
-  .banner{
-    display:flex;gap:10px;align-items:flex-start;
-    padding:14px 16px;border-radius:var(--radius);margin:20px 0 0;font-size:15px;
-  }
-  .banner.err{background:var(--err-soft);border:1px solid var(--err-line);color:var(--err)}
-  .banner.info{background:var(--accent-soft);border:1px solid var(--accent-line);color:var(--ink)}
-  .banner .ico{flex:0 0 auto;font-weight:700;line-height:1.5}
-
-  .rules{
-    background:var(--accent-soft);border:1px solid var(--accent-line);
-    border-radius:var(--radius);padding:18px 20px;margin:20px 0 0;font-size:15px;
-  }
-  .rules b{color:var(--accent)}
-  .rules .big{font-size:20px;font-weight:700;color:var(--accent)}
-
-  /* --- kpi --- */
-  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:12px;margin-top:22px}
-  .kpi{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px}
-  .kpi.hl{background:var(--accent-soft);border-color:var(--accent-line)}
-  .kpi .lbl{font-size:11.5px;letter-spacing:.7px;text-transform:uppercase;color:var(--muted);font-weight:600;min-height:2.6em}
-  .kpi .val{font-size:30px;font-weight:700;margin-top:6px;letter-spacing:-.6px;line-height:1.1}
-  .kpi.hl .val{color:var(--accent)}
-  .kpi .unit{font-size:16px;font-weight:600;color:var(--muted);margin-left:2px}
-
-  /* --- panel --- */
-  .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);margin-top:22px;overflow:hidden}
-  .panel-head{padding:20px 22px 4px}
-  .panel-head h2{margin:0;font-size:18px;letter-spacing:-.2px}
-  .panel-head p{margin:6px 0 0;color:var(--muted);font-size:14px}
-
-  .tablewrap{overflow-x:auto;padding:14px 14px 10px}
-  table{border-collapse:collapse;width:100%;min-width:760px;table-layout:auto}
-  th,td{padding:11px 9px;text-align:left;font-size:14px;border-bottom:1px solid var(--line);white-space:nowrap}
-  th{font-size:11px;letter-spacing:.4px;text-transform:uppercase;color:var(--muted);font-weight:600;border-bottom:1px solid var(--line)}
-  tbody tr:last-child td{border-bottom:none}
-  tbody tr.me{background:var(--accent-soft)}
-  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
-  .pname{font-weight:600}
-  .pmeta{display:block;color:var(--muted);font-size:12.5px;font-weight:400;margin-top:2px}
-  .code{
-    font:13.5px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-    background:#F1F4F1;border:1px solid var(--line);border-radius:7px;padding:6px 9px;display:inline-block;
-  }
-  .earn{font-weight:700;color:var(--accent)}
-  .off{color:var(--muted);font-size:12.5px}
-  .codecell{display:flex;align-items:center;gap:8px}
-
-  /* --- cards (mobile) --- */
-  .cards{display:none;padding:8px 14px 16px}
-  .pcard{border:1px solid var(--line);border-radius:12px;padding:16px;margin-top:10px}
-  .pcard.me{background:var(--accent-soft);border-color:var(--accent-line)}
-  .pcard .row{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:12px}
-  .pcard .cell .lbl{font-size:11px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);font-weight:600}
-  .pcard .cell .val{font-size:19px;font-weight:700;margin-top:2px}
-
-  /* --- gate --- */
-  .gate{max-width:440px;margin:60px auto;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:28px}
-  .gate h2{margin:0 0 6px;font-size:20px}
-  .gate p{margin:0 0 18px;color:var(--muted);font-size:14.5px}
-  .gate input{
-    width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;font-size:15px;
-    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  }
-  .gate input:focus{outline:none;border-color:var(--accent)}
-  .gate .btn{margin-top:12px;width:100%;background:var(--accent);color:#fff;border-color:var(--accent);padding:12px}
-  .gate .btn:hover{background:#255630}
-  .gate .why{margin-top:14px;font-size:13px;color:var(--muted)}
-
-  .foot{margin-top:26px;color:var(--muted);font-size:13px;text-align:center}
-  [hidden]{display:none !important}
-
-  @media (max-width:760px){
-    .wrap{padding:20px 14px 56px}
-    h1{font-size:23px}
-    .topright{align-items:flex-start;text-align:left}
-    .tablewrap{display:none}
-    .cards{display:block}
-    .kpi .val{font-size:26px}
-  }
+:root{--surface:#FFF;--surface-2:#F7F8F6;--surface-3:#F2F2F2;--ink:#181717;--ink-2:#4A4F4C;--ink-3:#7C8380;
+--line:#E4E7E3;--brand:#194536;--brand-2:#2E6A53;--lime-soft:#EAF3DF;
+--warn-bg:#FFF6E0;--warn-line:#E8C56B;--warn-ink:#6B4E05;--ok-bg:#E8F5EE;--ok-line:#7CC49E;--ok-ink:#14563A;
+--err-bg:#FDECEC;--err-line:#E9A3A3;--err-ink:#7B2020;
+--radius:14px;--mono:ui-monospace,SFMono-Regular,Menlo,monospace}
+@media(prefers-color-scheme:dark){:root{--surface:#121614;--surface-2:#191F1C;--surface-3:#1F2622;--ink:#EDF1EE;
+--ink-2:#AEB8B3;--ink-3:#7E8A85;--line:#2A322E;--brand:#8FD6B6;--brand-2:#69BF9B;--lime-soft:#243026;
+--warn-bg:#2E2510;--warn-line:#6E5717;--warn-ink:#F0D48A;--ok-bg:#14291F;--ok-line:#2F6349;--ok-ink:#9BE0BE;
+--err-bg:#2E1616;--err-line:#6B2F2F;--err-ink:#F0AFAF}}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--surface-2);color:var(--ink);
+font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:32px 22px 72px}
+header.top{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;justify-content:space-between;margin-bottom:20px}
+h1{font-size:25px;line-height:1.2;margin:0 0 5px;letter-spacing:-.015em}
+.sub{color:var(--ink-3);font-size:13.5px;margin:0}
+.upd{font-size:12px;color:var(--ink-3);text-align:right;line-height:1.7}
+.upd button{margin-top:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);
+border-radius:8px;font:600 12px/1 inherit;padding:7px 11px;cursor:pointer}
+.upd button:hover{background:var(--lime-soft);color:var(--brand)}
+.banner{display:flex;gap:12px;align-items:flex-start;border-radius:var(--radius);padding:14px 16px;
+font-size:13.5px;line-height:1.55;margin-bottom:20px;border:1px solid}
+.banner.warn{background:var(--warn-bg);border-color:var(--warn-line);color:var(--warn-ink)}
+.banner.ok{background:var(--ok-bg);border-color:var(--ok-line);color:var(--ok-ink)}
+.banner.err{background:var(--err-bg);border-color:var(--err-line);color:var(--err-ink)}
+.banner .ico{flex:0 0 auto}
+.rules{background:var(--lime-soft);border-radius:var(--radius);padding:16px 18px;margin-bottom:22px;
+font-size:13.5px;line-height:1.6;color:var(--brand)}
+.rules b{font-weight:700}
+.rules .pct{font-size:20px;font-weight:800;letter-spacing:-.01em}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(178px,1fr));gap:12px;margin-bottom:24px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:15px 16px 14px}
+.tile .lbl{font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3);font-weight:650;margin-bottom:7px}
+.tile .val{font-size:26px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.tile .val small{font-size:14px;font-weight:600;color:var(--ink-3);margin-left:3px}
+.tile .hint{font-size:11.5px;color:var(--ink-3);margin-top:6px;line-height:1.4}
+.tile.accent{background:var(--lime-soft);border-color:transparent}
+.tile.accent .val{color:var(--brand)}
+section{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px 20px 22px;margin-bottom:20px}
+h2{font-size:15px;margin:0 0 3px;font-weight:700}
+.h2sub{font-size:12.5px;color:var(--ink-3);margin:0 0 18px}
+.cards{display:flex;flex-direction:column;gap:10px}
+.card{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--surface)}
+.card:hover{border-color:var(--brand-2)}
+.card.me{border-color:var(--brand-2);background:var(--lime-soft)}
+.card .nm{font-weight:700;font-size:15px;margin-bottom:6px}
+.card .nm .tag{font-size:11px;font-weight:650;text-transform:uppercase;letter-spacing:.05em;
+color:var(--brand);background:var(--surface);border-radius:6px;padding:3px 7px;margin-left:8px;vertical-align:2px}
+.card .lnk{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:10px}
+.code{font-family:var(--mono);font-size:14px;font-weight:700;letter-spacing:.02em;color:var(--brand-2);
+background:var(--surface-3);border-radius:7px;padding:6px 10px}
+.copy{border:1px solid var(--line);background:var(--surface-3);color:var(--ink-2);
+border-radius:6px;font:600 11px/1 inherit;padding:6px 9px;cursor:pointer}
+.copy:hover{background:var(--lime-soft);color:var(--brand)}
+.stats{display:flex;gap:22px;flex-wrap:wrap;align-items:baseline}
+.stat .k{font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3);font-weight:650}
+.stat .v{font-size:18px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.stat.earn .v{color:var(--brand);font-size:20px}
+.stat .v em{font-style:normal;font-size:13px;font-weight:500;color:var(--ink-3)}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+.scroll{overflow-x:auto;margin:0 -20px;padding:0 20px}
+th,td{text-align:right;padding:11px 9px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:11px;letter-spacing:.045em;text-transform:uppercase;color:var(--ink-3);font-weight:650;
+border-bottom:1.5px solid var(--line);background:var(--surface)}
+th:first-child,td:first-child{text-align:left}
+tbody tr:hover td{background:var(--surface-2)}
+tbody tr.me td{background:var(--lime-soft)}
+td.num,td.money,td.due{font-variant-numeric:tabular-nums}
+td.money{font-weight:600}
+td.due{font-weight:700;color:var(--brand)}
+td.used{font-weight:700}
+tfoot td{border-bottom:0;border-top:1.5px solid var(--line);font-weight:700}
+.pname{font-weight:650}
+.pmeta{display:block;font-size:11.5px;color:var(--ink-3);font-weight:400;margin-top:2px;font-family:var(--mono)}
+.bars{display:flex;flex-direction:column;gap:9px}
+.row{display:grid;grid-template-columns:120px 1fr 132px;gap:12px;align-items:center}
+.row .nm{font-size:13px;color:var(--ink-2);text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.track{height:22px;background:var(--surface-3);border-radius:5px;overflow:hidden}
+.bar{height:100%;background:var(--brand-2);border-radius:0 5px 5px 0;min-width:2px;transition:width .45s cubic-bezier(.4,0,.2,1)}
+.row:hover .bar{background:var(--brand)}
+.row .amt{font-size:13px;font-variant-numeric:tabular-nums;font-weight:600}
+.row .amt em{font-style:normal;color:var(--ink-3);font-weight:500}
+.muted{color:var(--ink-3)}
+.gateRow{display:flex;gap:10px;flex-wrap:wrap}
+.gateRow input{flex:1 1 220px;min-width:0;border:1px solid var(--line);background:var(--surface-3);
+color:var(--ink);border-radius:9px;font:15px/1 inherit;padding:12px 13px}
+.gateRow button{border:0;background:var(--brand);color:#fff;border-radius:9px;font:650 14px/1 inherit;padding:12px 20px;cursor:pointer}
+@media(prefers-color-scheme:dark){.gateRow button{color:#0F1512}}
+footer{color:var(--ink-3);font-size:12px;text-align:center;margin-top:26px;line-height:1.8}
+@media(max-width:620px){.row{grid-template-columns:86px 1fr 104px}.wrap{padding:22px 14px 56px}h1{font-size:21px}.stats{gap:16px}}
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <div class="top">
-    <div>
-      <h1>Реферальная программа блогеров</h1>
-      <p class="sub">O-Live · вознаграждение <span id="pctSub">10%</span> с оплаченных продаж по промокоду</p>
-    </div>
-    <div class="topright">
-      <div class="stamp" id="updated">загрузка…</div>
-      <button class="btn" id="refresh">обновить</button>
-    </div>
+<header class="top">
+  <div>
+    <h1>Реферальная программа блогеров</h1>
+    <p class="sub">O-Live · вознаграждение 10% с продаж по промокоду</p>
   </div>
-
-  <div id="banner"></div>
-
-  <!-- вход по ключу -->
-  <div class="gate" id="gate" hidden>
-    <h2>Ключ доступа</h2>
-    <p id="gateHint">Введите ключ, который вы получили при регистрации.</p>
-    <input id="keyInput" placeholder="OLV-XXXX-XXXX-XXXX" autocomplete="off" spellcheck="false">
-    <button class="btn" id="keyGo">Открыть</button>
-    <div class="why">Ключ сохранится в этом браузере — вводить каждый раз не нужно.</div>
+  <div class="upd">
+    <span id="updated">загрузка…</span><br>
+    <span id="synced"></span>
+    <br><button id="refresh">обновить</button>
   </div>
+</header>
 
-  <!-- содержимое -->
-  <div id="content" hidden>
+<div id="banner"></div>
 
-    <div class="rules">
-      <span class="big" id="pctBig">10%</span> — вознаграждение блогера с каждой оплаченной продажи по его промокоду.<br>
-      Клиент получает скидку <b id="discPct">5%</b> и закрепляется за блогером на <b id="winDays">90 дней</b> — продления в этот срок тоже идут ему.
-      Продажа засчитывается по промокоду из сделки Bitrix24.
-    </div>
-
-    <div class="kpis">
-      <div class="kpi"><div class="lbl">Привлечено клиентов</div><div class="val" id="kCustomers">0</div></div>
-      <div class="kpi"><div class="lbl">Продаж (оплачено)</div><div class="val" id="kPaid">0</div></div>
-      <div class="kpi"><div class="lbl">Продано на</div><div class="val" id="kRevenue">0<span class="unit">₸</span></div></div>
-      <div class="kpi hl"><div class="lbl">Заработали блогеры</div><div class="val" id="kCommission">0<span class="unit">₸</span></div></div>
-      <div class="kpi"><div class="lbl">К выплате</div><div class="val" id="kBalance">0<span class="unit">₸</span></div></div>
-      <div class="kpi" id="kCodesBox"><div class="lbl">Свободных промокодов</div><div class="val" id="kCodes">—</div></div>
-    </div>
-
-    <div class="panel">
-      <div class="panel-head">
-        <h2 id="tblTitle">Промокоды блогеров и заработок</h2>
-        <p id="tblSub">Возле каждого промокода — сколько по нему продано и сколько блогер заработал</p>
-      </div>
-
-      <div class="tablewrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Блогер</th>
-              <th>Промокод</th>
-              <th class="num">Клиентов</th>
-              <th class="num">Сделок</th>
-              <th class="num">Оплачено</th>
-              <th class="num">Продано на</th>
-              <th class="num">Заработал</th>
-              <th class="num">Выплачено</th>
-              <th class="num">К выплате</th>
-              <th>Последний заказ</th>
-            </tr>
-          </thead>
-          <tbody id="tbody"></tbody>
-        </table>
-      </div>
-
-      <div class="cards" id="cards"></div>
-    </div>
-
-    <div class="foot" id="foot"></div>
+<section id="gate" hidden>
+  <h2>Ключ доступа</h2>
+  <p class="h2sub">Страница не хранит ключ в коде — введите его один раз, браузер запомнит на этом устройстве</p>
+  <div class="gateRow">
+    <input id="keyInput" type="password" placeholder="ключ доступа" autocomplete="off" spellcheck="false">
+    <button id="keyGo">Открыть</button>
   </div>
+</section>
 
+<div class="rules" id="rules"></div>
+
+<div class="tiles" id="tiles"></div>
+
+<section>
+  <h2 id="cardsTitle">Промокоды блогеров</h2>
+  <p class="h2sub">Возле каждого кода — сколько раз его применили и сколько блогер заработал</p>
+  <div class="cards" id="cards"></div>
+</section>
+
+<section>
+  <h2 id="chartTitle">Применения промокодов</h2>
+  <p class="h2sub" id="chartSub">сколько раз код ввели при оформлении заказа</p>
+  <div class="bars" id="bars"></div>
+</section>
+
+<section>
+  <h2>Детализация</h2>
+  <p class="h2sub">Применения → оплаченные заказы → сумма покупок → вознаграждение</p>
+  <div class="scroll">
+    <table>
+      <thead><tr>
+        <th>Блогер</th><th>Применений</th><th>Оплачено</th><th>Клиентов</th>
+        <th>Куплено на, ₸</th><th>Скидка клиентам, ₸</th>
+        <th>Заработал 10%, ₸</th><th>Выплачено, ₸</th><th>К выплате, ₸</th><th>Последнее применение</th>
+      </tr></thead>
+      <tbody id="tbody"></tbody>
+      <tfoot id="tfoot"></tfoot>
+    </table>
+  </div>
+</section>
+
+<footer id="foot"></footer>
 </div>
 
 <script>
-(function(){
-  "use strict";
+var API = 'https://vymjccflwkbvlqefsule.supabase.co/functions/v1/refboard';
 
-  var API = 'https://vymjccflwkbvlqefsule.supabase.co/functions/v1/refboard';
-  var STORE = 'olvRefKey';
-  var KEY = '';
-
-  try { KEY = localStorage.getItem(STORE) || ''; } catch (e) { KEY = ''; }
-  if (!KEY) {
-    var m = (location.search + '&' + location.hash).match(/[?&#]key=([^&#]+)/);
-    if (m) { KEY = decodeURIComponent(m[1]).trim(); saveKey(KEY); }
+function readKey(){
+  var m = location.hash.match(/key=([^&]+)/) || location.search.match(/[?&]key=([^&]+)/);
+  if (m) {
+    var k = decodeURIComponent(m[1]);
+    try { localStorage.setItem('olvRefKey', k); } catch (e) {}
+    history.replaceState(null, '', location.pathname);
+    return k;
   }
+  try { return localStorage.getItem('olvRefKey') || ''; } catch (e) { return ''; }
+}
+var KEY = readKey();
 
-  function saveKey(k){ try { localStorage.setItem(STORE, k); } catch (e) {} }
-  function dropKey(){ try { localStorage.removeItem(STORE); } catch (e) {} }
+var nf = new Intl.NumberFormat('ru-RU');
+function n0(v){ return nf.format(Math.round(Number(v) || 0)); }
+function dash(v){ return Number(v) ? n0(v) : '<span class="muted">—</span>'; }
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){
+  return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+function fmtDate(iso){
+  if (!iso) return 'нет данных';
+  try { return new Intl.DateTimeFormat('ru-RU',{dateStyle:'short',timeStyle:'short',timeZone:'Asia/Almaty'}).format(new Date(iso)); }
+  catch (e) { return iso; }
+}
+function plural(n, one, few, many){
+  var a = Math.abs(n) % 100, b = a % 10;
+  if (a > 10 && a < 20) return many;
+  if (b > 1 && b < 5) return few;
+  if (b === 1) return one;
+  return many;
+}
 
-  function $(id){ return document.getElementById(id); }
-  function esc(s){
-    return String(s == null ? '' : s)
-      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-      .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+function showGate(msg){
+  document.getElementById('gate').hidden = false;
+  ['tiles','cards','bars','tbody','tfoot'].forEach(function(id){ document.getElementById(id).innerHTML = ''; });
+  document.getElementById('rules').innerHTML = '';
+  document.getElementById('updated').textContent = msg || 'нужен ключ доступа';
+  document.getElementById('synced').textContent = '';
+  document.getElementById('keyInput').focus();
+}
+
+function tile(label, value, hint, accent){
+  return '<div class="tile' + (accent ? ' accent' : '') + '"><div class="lbl">' + label +
+         '</div><div class="val">' + value + '</div>' +
+         (hint ? '<div class="hint">' + hint + '</div>' : '') + '</div>';
+}
+
+function render(d){
+  var p = d.partners, t = d.totals;
+  var isTeam = !d.viewer || d.viewer.role === 'team';
+  var pct = (p[0] && p[0].commissionPct) || 10;
+
+  document.getElementById('updated').textContent = 'обновлено ' + fmtDate(d.generatedAt);
+  document.getElementById('synced').textContent = 'заказы сайта: ' + fmtDate(d.usesSyncedAt);
+
+  document.getElementById('rules').innerHTML =
+    '<span class="pct">' + pct + '%</span> — вознаграждение блогера с каждой покупки по его промокоду.<br>' +
+    'Клиент вводит код на сайте и получает скидку ' + (d.discountPct || 5) + '%. ' +
+    '<b>Заработок = сумма покупки до скидки × ' + pct + '%</b>: покупка на 10 000 ₸ со скидкой 500 ₸ — ' +
+    'клиент платит 9 500 ₸, блогер зарабатывает 1 000 ₸.<br>' +
+    'Клиент закрепляется за блогером на <b>' + ((p[0] && p[0].windowDays) || 90) + ' дней</b> — продления в этот срок тоже идут ему.';
+
+  document.getElementById('banner').innerHTML = t.uses
+    ? '<div class="banner ok"><span class="ico">✓</span><span><b>Промокод' + (isTeam ? 'ы применяли' : ' применяли') + ' ' +
+      n0(t.uses) + ' ' + plural(t.uses, 'раз', 'раза', 'раз') + '.</b> ' +
+      'Из них оплачено ' + n0(t.usesPaid) + ' — по ним и считается вознаграждение. ' +
+      'Неоплаченные заказы видны в счётчике применений, но денег пока не приносят.</span></div>'
+    : '<div class="banner warn"><span class="ico">⚠</span><span><b>Промокод пока никто не применил.</b> ' +
+      'Как только его введут при оформлении заказа, счётчик применений вырастет здесь автоматически.</span></div>';
+
+  var tiles =
+    tile('Применений промокода', n0(t.uses), 'все заказы с кодом') +
+    tile('Оплачено', n0(t.usesPaid || t.paid), 'заказы, прошедшие оплату') +
+    tile('Куплено на', n0(t.revenue) + '<small>₸</small>', 'сумма до скидки, оплаченные') +
+    tile('Заработ' + (isTeam ? 'али блогеры' : 'ано'), n0(t.commission) + '<small>₸</small>', pct + '% от суммы до скидки', true) +
+    tile('К выплате', n0(t.balance) + '<small>₸</small>', 'начислено минус выплачено');
+  if (isTeam && d.codesTotal != null) {
+    tiles += tile('Свободных промокодов', n0(d.codesFree) + '<small>из ' + n0(d.codesTotal) + '</small>', 'готовы к выдаче');
   }
-  function num(v){ return Number(v) || 0; }
-  function money(v){ return num(v).toLocaleString('ru-RU'); }
-  function moneyU(v){ return money(v) + '<span class="unit">₸</span>'; }
-  function dt(s){
-    if (!s) return '—';
-    var d = new Date(s);
-    if (isNaN(d.getTime())) return '—';
-    return d.toLocaleDateString('ru-RU', {day:'2-digit', month:'2-digit', year:'2-digit'});
-  }
-  function time(s){
-    var d = s ? new Date(s) : new Date();
-    if (isNaN(d.getTime())) d = new Date();
-    return d.toLocaleTimeString('ru-RU', {hour:'2-digit', minute:'2-digit'});
-  }
+  document.getElementById('tiles').innerHTML = tiles;
 
-  function banner(kind, html){
-    $('banner').innerHTML = html
-      ? '<div class="banner ' + kind + '"><span class="ico">' + (kind === 'err' ? '✕' : 'i') + '</span><span>' + html + '</span></div>'
-      : '';
-  }
+  document.getElementById('cardsTitle').textContent = isTeam ? 'Промокоды блогеров' : 'Ваш промокод';
 
-  function showGate(hint){
-    $('content').hidden = true;
-    $('gate').hidden = false;
-    if (hint) $('gateHint').textContent = hint;
-    $('updated').textContent = 'нужен ключ';
-    $('keyInput').focus();
-  }
+  document.getElementById('cards').innerHTML = p.map(function(b){
+    return '<div class="card' + (b.isMe ? ' me' : '') + '">' +
+      '<div class="nm">' + esc(b.name) + (b.isMe ? '<span class="tag">это вы</span>' : '') +
+      (b.instagram ? ' <span class="muted" style="font-weight:400;font-size:13px">@' + esc(b.instagram) + '</span>' : '') + '</div>' +
+      '<div class="lnk"><span class="code">' + esc(b.code) + '</span>' +
+      '<button class="copy" data-copy="' + esc(b.code) + '">копировать код</button></div>' +
+      '<div class="stats">' +
+        '<div class="stat"><div class="k">Применений</div><div class="v">' + n0(b.uses) + '</div></div>' +
+        '<div class="stat"><div class="k">Оплачено</div><div class="v">' + n0(b.usesPaid || b.paid) + '</div></div>' +
+        '<div class="stat"><div class="k">Куплено на</div><div class="v">' + n0(b.revenue) + ' <em>₸</em></div></div>' +
+        '<div class="stat earn"><div class="k">Заработал (' + b.commissionPct + '%)</div><div class="v">' + n0(b.commission) + ' <em>₸</em></div></div>' +
+      '</div></div>';
+  }).join('');
 
-  function copy(text, btn){
-    var done = function(){
-      var old = btn.textContent;
-      btn.textContent = 'скопировано';
-      setTimeout(function(){ btn.textContent = old; }, 1400);
-    };
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text).then(done, function(){ fallback(text, done); });
-    } else {
-      fallback(text, done);
-    }
-  }
-  function fallback(text, done){
-    var ta = document.createElement('textarea');
-    ta.value = text;
-    ta.style.position = 'fixed';
-    ta.style.opacity = '0';
-    document.body.appendChild(ta);
-    ta.select();
-    try { document.execCommand('copy'); done(); } catch (e) {}
-    document.body.removeChild(ta);
-  }
+  var anyMoney = t.commission > 0;
+  var max = 1;
+  for (var i = 0; i < p.length; i++) max = Math.max(max, anyMoney ? p[i].commission : p[i].uses);
+  document.getElementById('chartTitle').textContent = anyMoney ? 'Заработок по блогерам' : 'Применения промокодов';
+  document.getElementById('chartSub').textContent = anyMoney
+    ? pct + '% от суммы покупок до скидки, ₸'
+    : 'сколько раз код ввели при оформлении заказа';
 
-  function render(d){
-    var partners = Array.isArray(d.partners) ? d.partners : [];
-    var viewer   = d.viewer || {};
-    var isPartner = viewer.role === 'partner';
+  document.getElementById('bars').innerHTML = p.map(function(b){
+    var v = anyMoney ? b.commission : b.uses;
+    var tip = b.name + ' · ' + b.code + ': ' + n0(v) + (anyMoney ? ' ₸ заработано' : ' применений');
+    return '<div class="row" title="' + esc(tip) + '">' +
+      '<div class="nm">' + esc(b.name) + '</div>' +
+      '<div class="track"><div class="bar" style="width:' + (v / max * 100).toFixed(1) + '%"></div></div>' +
+      '<div class="amt">' + (v ? n0(v) : '<em>нет данных</em>') + '</div></div>';
+  }).join('');
 
-    // блогер видит только свою строку
-    var rows = isPartner ? partners.filter(function(p){ return p.isMe; }) : partners;
-    if (isPartner && !rows.length) rows = partners.slice(0, 1);
+  document.getElementById('tbody').innerHTML = p.map(function(b){
+    return '<tr' + (b.isMe ? ' class="me"' : '') + '><td><span class="pname">' + esc(b.name) + '</span>' +
+      '<span class="pmeta">' + esc(b.code) + '</span></td>' +
+      '<td class="used">' + dash(b.uses) + '</td>' +
+      '<td class="num">' + dash(b.usesPaid || b.paid) + '</td>' +
+      '<td class="num">' + dash(b.customers) + '</td>' +
+      '<td class="money">' + dash(b.revenue) + '</td>' +
+      '<td class="num">' + dash(b.usesDiscount) + '</td>' +
+      '<td class="due">' + dash(b.commission) + '</td>' +
+      '<td class="num">' + dash(b.paidOut) + '</td>' +
+      '<td class="money">' + dash(b.balance) + '</td>' +
+      '<td class="num muted">' + (b.lastUseAt || b.lastOrderAt ? fmtDate(b.lastUseAt || b.lastOrderAt) : '—') + '</td></tr>';
+  }).join('');
 
-    var pct = rows.length ? num(rows[0].commissionPct) : 10;
-    if (!pct) pct = 10;
-    var win = rows.length ? num(rows[0].windowDays) : 90;
-    if (!win) win = 90;
+  document.getElementById('tfoot').innerHTML = '<tr><td>Итого</td>' +
+    '<td class="used">' + dash(t.uses) + '</td>' +
+    '<td class="num">' + dash(t.usesPaid || t.paid) + '</td>' +
+    '<td class="num">' + dash(t.customers) + '</td>' +
+    '<td class="money">' + dash(t.revenue) + '</td>' +
+    '<td class="num">' + dash(t.usesDiscount) + '</td>' +
+    '<td class="due">' + dash(t.commission) + '</td>' +
+    '<td class="num">' + dash(t.paidOut) + '</td>' +
+    '<td class="money">' + dash(t.balance) + '</td><td></td></tr>';
 
-    $('pctSub').textContent = pct + '%';
-    $('pctBig').textContent = pct + '%';
-    $('discPct').textContent = (num(d.discountPct) || 5) + '%';
-    $('winDays').textContent = win + ' дней';
+  document.getElementById('foot').innerHTML =
+    'Применение = промокод введён при оформлении заказа на olive.kz · оплаченным считается заказ, прошедший оплату<br>' +
+    'Вознаграждение ' + pct + '% считается от суммы покупки до скидки · заказы сайта подтягиваются регулярно, страница обновляется каждые 5 минут';
+}
 
-    // итоги: для блогера — по своей строке, для команды — общие
-    var t = isPartner
-      ? rows.reduce(function(a, p){
-          return {
-            customers:  a.customers  + num(p.customers),
-            paid:       a.paid       + num(p.paid),
-            revenue:    a.revenue    + num(p.revenue),
-            commission: a.commission + num(p.commission),
-            balance:    a.balance    + num(p.balance)
-          };
-        }, {customers:0, paid:0, revenue:0, commission:0, balance:0})
-      : (d.totals || {});
+function load(){
+  if (!KEY) { showGate(); return; }
+  fetch(API + '?key=' + encodeURIComponent(KEY) + '&t=' + Date.now())
+    .then(function(r){ return r.json().then(function(d){ return {status:r.status, body:d}; }); })
+    .then(function(res){
+      if (res.status === 401) {
+        try { localStorage.removeItem('olvRefKey'); } catch (e) {}
+        KEY = '';
+        document.getElementById('banner').innerHTML =
+          '<div class="banner err"><span class="ico">✕</span><span><b>Ключ не подошёл.</b> Введите ключ заново.</span></div>';
+        showGate('неверный ключ');
+        return;
+      }
+      if (!res.body.ok) throw new Error(res.body.message || 'Нет данных');
+      document.getElementById('gate').hidden = true;
+      render(res.body);
+    })
+    .catch(function(e){
+      document.getElementById('banner').innerHTML =
+        '<div class="banner err"><span class="ico">✕</span><span><b>Не удалось загрузить данные.</b> ' + esc(e.message) + '</span></div>';
+      document.getElementById('updated').textContent = 'ошибка загрузки';
+    });
+}
 
-    $('kCustomers').textContent  = money(t.customers);
-    $('kPaid').textContent       = money(t.paid);
-    $('kRevenue').innerHTML      = moneyU(t.revenue);
-    $('kCommission').innerHTML   = moneyU(t.commission);
-    $('kBalance').innerHTML      = moneyU(t.balance);
-    $('kCodes').textContent      = (d.codesTotal ? money(d.codesFree) + ' / ' + money(d.codesTotal) : '—');
-    $('kCodesBox').hidden        = isPartner;   // блогеру внутренняя кухня не нужна
-
-    if (isPartner) {
-      $('tblTitle').textContent = 'Ваш промокод и заработок';
-      $('tblSub').textContent   = 'Раздавайте код подписчикам — по нему считается ваше вознаграждение';
-    }
-
-    // таблица
-    var html = '';
-    for (var i = 0; i < rows.length; i++) {
-      var p = rows[i];
-      var code = p.code == null ? '' : String(p.code);
-      html +=
-        '<tr class="' + (p.isMe ? 'me' : '') + '">' +
-          '<td><span class="pname">' + esc(p.name || '—') + '</span>' +
-            (p.instagram ? '<span class="pmeta">@' + esc(p.instagram) + '</span>' : '') +
-            (p.isActive === false ? '<span class="pmeta off">отключён</span>' : '') +
-          '</td>' +
-          '<td><span class="codecell"><span class="code">' + esc(code) + '</span>' +
-            (code ? '<button class="btn small js-copy" data-code="' + esc(code) + '">копировать</button>' : '') +
-          '</span></td>' +
-          '<td class="num">' + money(p.customers) + '</td>' +
-          '<td class="num">' + money(p.deals) + '</td>' +
-          '<td class="num">' + money(p.paid) + '</td>' +
-          '<td class="num">' + money(p.revenue) + ' ₸</td>' +
-          '<td class="num earn">' + money(p.commission) + ' ₸</td>' +
-          '<td class="num">' + money(p.paidOut) + ' ₸</td>' +
-          '<td class="num">' + money(p.balance) + ' ₸</td>' +
-          '<td>' + dt(p.lastOrderAt) + '</td>' +
-        '</tr>';
-    }
-    if (!rows.length) {
-      html = '<tr><td colspan="10" style="color:#6B7A70">Пока ни одного блогера в программе.</td></tr>';
-    }
-    $('tbody').innerHTML = html;
-
-    // карточки для телефона
-    var ch = '';
-    for (var j = 0; j < rows.length; j++) {
-      var q = rows[j];
-      var qcode = q.code == null ? '' : String(q.code);
-      ch +=
-        '<div class="pcard ' + (q.isMe ? 'me' : '') + '">' +
-          '<div class="pname">' + esc(q.name || '—') + '</div>' +
-          (q.instagram ? '<div class="pmeta">@' + esc(q.instagram) + '</div>' : '') +
-          '<div style="margin-top:10px" class="codecell"><span class="code">' + esc(qcode) + '</span>' +
-            (qcode ? '<button class="btn small js-copy" data-code="' + esc(qcode) + '">копировать</button>' : '') +
-          '</div>' +
-          '<div class="row">' +
-            '<div class="cell"><div class="lbl">Клиентов</div><div class="val">' + money(q.customers) + '</div></div>' +
-            '<div class="cell"><div class="lbl">Оплачено продаж</div><div class="val">' + money(q.paid) + '</div></div>' +
-            '<div class="cell"><div class="lbl">Продано на</div><div class="val">' + money(q.revenue) + ' ₸</div></div>' +
-            '<div class="cell"><div class="lbl">Заработал</div><div class="val" style="color:#2F6B3C">' + money(q.commission) + ' ₸</div></div>' +
-          '</div>' +
-        '</div>';
-    }
-    $('cards').innerHTML = ch;
-
-    // подсказка, когда всё по нулям
-    if (rows.length && num(t.paid) === 0 && num(t.revenue) === 0) {
-      banner('info', 'Продаж по промокодам пока не засчитано. Пока сайт не начнёт записывать промокод в сделку Bitrix24, здесь будут нули — даже если заказы по коду уже были.');
-    } else {
-      banner('', '');
-    }
-
-    $('foot').textContent = 'Данные из Bitrix24 через базу O-Live · ' +
-      (!isPartner && d.partnersCount != null ? d.partnersCount + ' блогеров в программе · ' : '') +
-      'обновление каждые 5 минут';
-
-    $('gate').hidden = true;
-    $('content').hidden = false;
-    $('updated').textContent = 'обновлено в ' + time(d.generatedAt);
-  }
-
-  function load(){
-    if (!KEY) { showGate(); return; }
-    $('updated').textContent = 'обновляю…';
-
-    fetch(API + '?key=' + encodeURIComponent(KEY) + '&t=' + Date.now())
-      .then(function(r){
-        return r.text().then(function(txt){
-          var body = null;
-          try { body = JSON.parse(txt); } catch (e) { body = null; }
-          return {status: r.status, body: body, raw: txt};
-        });
-      })
-      .then(function(res){
-        if (res.status === 401) {
-          dropKey(); KEY = '';
-          banner('err', '<b>Ключ не подошёл.</b> Введите ключ заново.');
-          showGate('Ключ не подошёл. Проверьте и введите ещё раз.');
-          return;
-        }
-        if (!res.body) throw new Error('Сервер вернул не JSON (код ' + res.status + ')');
-        if (!res.body.ok) throw new Error(res.body.message || ('Ошибка ' + res.status));
-        render(res.body);
-      })
-      .catch(function(e){
-        banner('err', '<b>Не удалось загрузить данные.</b> ' + esc(e && e.message ? e.message : e));
-        $('updated').textContent = 'ошибка загрузки';
-      });
-  }
-
-  // события
-  document.addEventListener('click', function(ev){
-    var b = ev.target;
-    if (b && b.classList && b.classList.contains('js-copy')) {
-      copy(b.getAttribute('data-code') || '', b);
-    }
-  });
-  $('refresh').addEventListener('click', load);
-  $('keyGo').addEventListener('click', function(){
-    var v = ($('keyInput').value || '').trim();
-    if (!v) return;
-    KEY = v; saveKey(v); banner('', ''); load();
-  });
-  $('keyInput').addEventListener('keydown', function(ev){
-    if (ev.key === 'Enter') $('keyGo').click();
-  });
-
+function submitKey(){
+  var v = document.getElementById('keyInput').value.trim();
+  if (!v) return;
+  KEY = v;
+  try { localStorage.setItem('olvRefKey', v); } catch (e) {}
+  document.getElementById('banner').innerHTML = '';
+  document.getElementById('keyInput').value = '';
   load();
-  setInterval(load, 5 * 60 * 1000);
-})();
+}
+
+document.addEventListener('click', function(e){
+  var b = e.target.closest('.copy');
+  if (b) {
+    navigator.clipboard.writeText(b.getAttribute('data-copy')).then(function(){
+      var old = b.textContent; b.textContent = 'скопировано';
+      setTimeout(function(){ b.textContent = old; }, 1400);
+    });
+    return;
+  }
+  if (e.target.id === 'refresh') load();
+  if (e.target.id === 'keyGo') submitKey();
+});
+document.addEventListener('keydown', function(e){
+  if (e.key === 'Enter' && e.target.id === 'keyInput') submitKey();
+});
+
+load();
+setInterval(function(){ if (KEY) load(); }, 300000);
 </script>
 </body>
 </html>
